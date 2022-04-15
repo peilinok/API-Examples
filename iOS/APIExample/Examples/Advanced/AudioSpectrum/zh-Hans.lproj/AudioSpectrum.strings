@@ -1,0 +1,6 @@
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "SSE-Ie-iqJ"; */
+"SSE-Ie-iqJ.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "fKP-DU-qAo"; */
+"fKP-DU-qAo.placeholder" = "输入频道名";
