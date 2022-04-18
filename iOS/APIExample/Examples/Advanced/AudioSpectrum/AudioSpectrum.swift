@@ -7,12 +7,11 @@
 //
 
 /// Audio Spectrum
-/// This module show how to obverser and show audio spectrum data.
+/// This module show how to obverser and show audio spectrum data
 /// 1.Enable Audio Spectrum: agoraKit.enableAudioSpectrumMonitor(200)
 /// 2.Register obesever: agoraKit.registerAudioSpectrumDelegate(self)
 /// 3.Call back AgoraAudioSpectrumDelegate to get local and remote spectrum data
-///
-/// More detail: Todo
+
 
 import AgoraRtcKit
 import AGEVideoLayout
@@ -37,8 +36,9 @@ class AudioSpectrumViewController: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         agoraKit.setClientRole(.broadcaster)
                 
-        // Enable Audio Spectrum and register data observer
+        // Enable audio spectrum and register data observer
         agoraKit.enableAudioSpectrumMonitor(200)
+        // Swift rename with [registerAudioSpectrumDelegate:]
         agoraKit.register(self)
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
@@ -61,7 +61,7 @@ class AudioSpectrumViewController: BaseViewController {
     }
     
     // MARK: - UI
-    func setupSpectrum(values: [NSNumber], layer: CAShapeLayer) {
+    func updateSpectrumView(values: [NSNumber], layer: CAShapeLayer) {
         let count = values.count
         let rectWidth = layer.frame.size.width
         let rectHeight = layer.frame.size.height;
@@ -78,7 +78,6 @@ class AudioSpectrumViewController: BaseViewController {
             path.append(linePath)
             x += lineWidth + lineGap
         }
-        
         layer.path = path.cgPath
     }
     
@@ -123,7 +122,7 @@ class AudioSpectrumViewController: BaseViewController {
 extension AudioSpectrumViewController: AgoraAudioSpectrumDelegate {
     func onLocalAudioSpectrum(_ audioSpectrumData: [NSNumber]?) -> Bool {
         DispatchQueue.main.async {
-            self.setupSpectrum(values: audioSpectrumData!, layer: self.localSpectrumpLayer)
+            self.updateSpectrumView(values: audioSpectrumData!, layer: self.localSpectrumpLayer)
         }
         return true
     }
@@ -132,7 +131,7 @@ extension AudioSpectrumViewController: AgoraAudioSpectrumDelegate {
         guard let audioSpectrumData = AudioSpectrumInfo?.first?.audioSpectrumData,
                   audioSpectrumData.count > 0 else {return true}
         DispatchQueue.main.async {
-            self.setupSpectrum(values: audioSpectrumData, layer: self.remoteSpectrumpLayer)
+            self.updateSpectrumView(values: audioSpectrumData, layer: self.remoteSpectrumpLayer)
         }
         return true
     }
