@@ -124,6 +124,35 @@ extension RawVideoData: AgoraVideoDataFrameProtocol {
     func onRenderVideoFrame(_ videoFrame: AgoraVideoDataFrame!, forUid uid: UInt32) -> Bool {
         return true
     }
+
+    func onPreEncodeVideoFrame(_ videoFrame: AgoraVideoDataFrame!) -> Bool {
+        return true
+    }
+    
+    func getVideoFormatPreference() -> AgoraVideoFrameType {
+        return .YUV420
+    }
+    
+    func getRotationApplied() -> Bool {
+        return true
+    }
+    
+    func getMirrorApplied() -> Bool {
+        return true
+    }
+    
+    func getObservedFramePosition() -> AgoraVideoFramePosition {
+        return .postCapture
+    }
+    
+    func isMultipleChannelFrameWanted() -> Bool {
+        return true
+    }
+    
+    func onRenderVideoFrameEx(_ videoFrame: AgoraVideoDataFrame!, forUid uid: UInt32, inChannel channelId: String!) -> Bool {
+        return true
+    }
+    
 }
 
 // MARK: - AgoraRtcEngineDelegate
