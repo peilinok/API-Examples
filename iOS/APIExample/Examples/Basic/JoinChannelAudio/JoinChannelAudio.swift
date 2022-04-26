@@ -120,7 +120,7 @@ class JoinChannelAudioMain: BaseViewController {
         agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
         
         // enable local voice pitch
-        agoraKit.enableLocalVoicePitchCallback(200)
+//        agoraKit.enableLocalVoicePitchCallback(200)
         
         
         // start joining channel

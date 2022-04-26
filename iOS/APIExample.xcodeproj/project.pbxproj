@@ -109,8 +109,6 @@
 		67B8C79E2804081F00195106 /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B8C79D2804081F00195106 /* RawVideoData.swift */; };
 		67B8C7A7280511CB00195106 /* MediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B8C7A6280511CB00195106 /* MediaUtils.m */; };
 		67B8C7A82805642300195106 /* RawVideoData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67B8C7AA2805642300195106 /* RawVideoData.storyboard */; };
-		67D9A15727E94FAF008C3F8E /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67D9A15527E94FAF008C3F8E /* SpatialAudio.storyboard */; };
-		67D9A15827E94FAF008C3F8E /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D9A15627E94FAF008C3F8E /* SpatialAudio.swift */; };
 		7F76DCA92571794C00E8B7BC /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F76DCA82571794C00E8B7BC /* SettingsCells.swift */; };
 		7FDE65A2257E5DCA002AC81F /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -319,8 +317,6 @@
 		67B8C7A6280511CB00195106 /* MediaUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaUtils.m; sourceTree = "<group>"; };
 		67B8C7A92805642300195106 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawVideoData.storyboard; sourceTree = "<group>"; };
 		67B8C7AC2805642B00195106 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RawVideoData.strings"; sourceTree = "<group>"; };
-		67D9A15527E94FAF008C3F8E /* SpatialAudio.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SpatialAudio.storyboard; sourceTree = "<group>"; };
-		67D9A15627E94FAF008C3F8E /* SpatialAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
 		7F76DCA82571794C00E8B7BC /* SettingsCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCells.swift; sourceTree = "<group>"; };
 		7FBE1D502576A904005A8619 /* pvc_jnqd.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = pvc_jnqd.bundle; path = Pods/AgoraRtcEngine_iOS/AgoraRtcKit.framework/AgoraResources/pvc_jnqd.bundle; sourceTree = SOURCE_ROOT; };
 		7FBE1D512576A904005A8619 /* srmetal.metallib */ = {isa = PBXFileReference; lastKnownFileType = "archive.metal-library"; name = srmetal.metallib; path = Pods/AgoraRtcEngine_iOS/AgoraRtcKit.framework/AgoraResources/srmetal.metallib; sourceTree = SOURCE_ROOT; };
@@ -850,15 +846,6 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		67D9A15427E94F50008C3F8E /* SpatialAudio */ = {
-			isa = PBXGroup;
-			children = (
-				67D9A15527E94FAF008C3F8E /* SpatialAudio.storyboard */,
-				67D9A15627E94FAF008C3F8E /* SpatialAudio.swift */,
-			);
-			path = SpatialAudio;
-			sourceTree = "<group>";
-		};
 		8BAF3C932758693A0073B30E /* VideoProcess */ = {
 			isa = PBXGroup;
 			children = (
@@ -907,7 +894,6 @@
 				0339D6CA24E9170D008739CD /* QuickSwitchChannel */,
 				036CBA372519181400D74FAD /* StreamEncryption */,
 				0339BE65251DE88D007D4FDD /* PrecallTest */,
-				67D9A15427E94F50008C3F8E /* SpatialAudio */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -1067,7 +1053,6 @@
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				57B7FC89259C599100407BE1 /* RawAudioData.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
-				67D9A15727E94FAF008C3F8E /* SpatialAudio.storyboard in Resources */,
 				576EA58525AED471000B3D79 /* VideoChat.storyboard in Resources */,
 				033A9F48252D89D000BC26E1 /* CustomAudioRender.storyboard in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
@@ -1186,7 +1171,6 @@
 				0339BE84251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm in Sources */,
 				033A9F09252D61FC00BC26E1 /* RTMPStreaming.swift in Sources */,
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
-				67D9A15827E94FAF008C3F8E /* SpatialAudio.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
 				576EA57A25ADC4A1000B3D79 /* VideoChat.swift in Sources */,
 				0339BE85251EF728007D4FDD /* AgoraMediaPlayerEx.cpp in Sources */,

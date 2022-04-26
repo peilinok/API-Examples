@@ -55,8 +55,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: "MediaPlayer"),
             MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: ""),
-            MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
-            MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio")
+            MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: "")
+//            MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio")
         ]),
     ]
     
