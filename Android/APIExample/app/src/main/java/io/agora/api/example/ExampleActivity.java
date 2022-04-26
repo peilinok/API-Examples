@@ -32,7 +32,6 @@ import io.agora.api.example.examples.advanced.ScreenShare;
 import io.agora.api.example.examples.advanced.SendDataStream;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.SetVideoProfile;
-import io.agora.api.example.examples.advanced.SpatialSound;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
 import io.agora.api.example.examples.advanced.SuperResolution;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
@@ -159,9 +158,9 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_screen_share:
                 fragment = new ScreenShare();
                 break;
-            case R.id.action_mainFragment_to_spatial_sound:
-                fragment = new SpatialSound();
-                break;
+//            case R.id.action_mainFragment_to_spatial_sound:
+//                fragment = new SpatialSound();
+//                break;
             default:
                 fragment = new JoinChannelAudio();
                 break;

@@ -188,7 +188,7 @@ public class ScreenSharingService extends Service {
 
     private Notification getForeNotification() {
         Notification notification;
-        String eventTitle = getResources().getString(R.string.app_name);
+        String eventTitle = "screenShareService";
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationHelper.generateChannelId(getApplication(), 55431))
                 .setContentTitle(eventTitle)
                 .setContentText(eventTitle);
