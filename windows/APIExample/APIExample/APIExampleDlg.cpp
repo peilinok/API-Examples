@@ -237,7 +237,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRegionConn);
    m_vecAdvanced.push_back(advancedCrossChannel);
    m_vecAdvanced.push_back(advancedMultiVideoSource);
-   m_vecAdvanced.push_back(SpatialAudio);
+   //m_vecAdvanced.push_back(SpatialAudio);
    //rtmp
    m_pRtmpStreamingDlg = new CAgoraRtmpStreamingDlg(&m_staMainArea);
    m_pRtmpStreamingDlg->Create(CAgoraRtmpStreamingDlg::IDD);
@@ -361,9 +361,9 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pMultiVideoSourceDlg->MoveWindow(&rcWnd);
 
    // spatial audio
-   m_pSpatialAudioDlg = new CAgoraSpatialAudioDlg(&m_staMainArea);
+   /*m_pSpatialAudioDlg = new CAgoraSpatialAudioDlg(&m_staMainArea);
    m_pSpatialAudioDlg->Create(CAgoraSpatialAudioDlg::IDD);
-   m_pSpatialAudioDlg->MoveWindow(&rcWnd);
+   m_pSpatialAudioDlg->MoveWindow(&rcWnd);*/
 
 }
 

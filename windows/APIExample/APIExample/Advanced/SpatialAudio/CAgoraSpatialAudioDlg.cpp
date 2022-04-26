@@ -304,48 +304,48 @@ LRESULT CAgoraSpatialAudioDlg::OnLButtonDownVideo(WPARAM wParam, LPARAM lParam)
 
 void CAgoraSpatialAudioDlg::SetSpatialAudioParam()
 {
-	POINT ptLocal = { rcLocal.left + localWidth / 2.0f,rcLocal.top + localWidth / 2.0f };
-	POINT ptRemote = { rcRemote.left + remoteWidth / 2.0f,rcRemote.top + remoteWidth / 2.0f };
+	//POINT ptLocal = { rcLocal.left + localWidth / 2.0f,rcLocal.top + localWidth / 2.0f };
+	//POINT ptRemote = { rcRemote.left + remoteWidth / 2.0f,rcRemote.top + remoteWidth / 2.0f };
 
-	SpatialAudioParams spatial_audio_params;
-	int deltaX = ptRemote.x - ptLocal.x;
-	int deltaY = ptLocal.y - ptRemote.y;
+	//SpatialAudioParams spatial_audio_params;
+	//int deltaX = ptRemote.x - ptLocal.x;
+	//int deltaY = ptLocal.y - ptRemote.y;
 
-	int tanAngle = 0;
-	float tanValue = 1;
-	if (deltaX == 0) {
-		if (deltaY > 0)
-			tanAngle = 360;
-		else if (deltaY < 0)
-			tanAngle = 180;
-	}else{
-		tanValue = fabs(deltaY) / fabs(deltaX);
-		tanAngle = atan(tanValue) * 180.0 / 3.1415926;
-	}
+	//int tanAngle = 0;
+	//float tanValue = 1;
+	//if (deltaX == 0) {
+	//	if (deltaY > 0)
+	//		tanAngle = 360;
+	//	else if (deltaY < 0)
+	//		tanAngle = 180;
+	//}else{
+	//	tanValue = fabs(deltaY) / fabs(deltaX);
+	//	tanAngle = atan(tanValue) * 180.0 / 3.1415926;
+	//}
 
-	int spatialAngle = 0.0; // It is Angle 0 when at Y direction
-	if (deltaX > 0 && deltaY > 0) { // scope I
-		spatialAngle = 270.0 + tanAngle;
-	}
-	else if (deltaX < 0 && deltaY > 0) { // scope II
-		spatialAngle = 90.0 - tanAngle;
-	}
-	else if (deltaX < 0 && deltaY < 0) { // scope III
-		spatialAngle = 90.0 + tanAngle;
-	}
-	else if (deltaX > 0 && deltaY < 0) { // scope VI
-		spatialAngle = 270.0 - tanAngle;
-	}
+	//int spatialAngle = 0.0; // It is Angle 0 when at Y direction
+	//if (deltaX > 0 && deltaY > 0) { // scope I
+	//	spatialAngle = 270.0 + tanAngle;
+	//}
+	//else if (deltaX < 0 && deltaY > 0) { // scope II
+	//	spatialAngle = 90.0 - tanAngle;
+	//}
+	//else if (deltaX < 0 && deltaY < 0) { // scope III
+	//	spatialAngle = 90.0 + tanAngle;
+	//}
+	//else if (deltaX > 0 && deltaY < 0) { // scope VI
+	//	spatialAngle = 270.0 - tanAngle;
+	//}
 
-	CString str;
-	str.Format(_T("%d\n"), spatialAngle);
-	OutputDebugString(str);
-	int spatialDistance =  sqrt(deltaX*deltaX + deltaY * deltaY) / distanceRate;
-	spatial_audio_params.speaker_distance = 0;// spatialDistance;
-	spatial_audio_params.speaker_azimuth = spatialAngle;
-	spatial_audio_params.speaker_elevation = 0;
-	spatial_audio_params.speaker_orientation = 0;
-	m_rtcEngine->setRemoteUserSpatialAudioParams(uid, spatial_audio_params);
+	//CString str;
+	//str.Format(_T("%d\n"), spatialAngle);
+	//OutputDebugString(str);
+	//int spatialDistance =  sqrt(deltaX*deltaX + deltaY * deltaY) / distanceRate;
+	//spatial_audio_params.speaker_distance = 0;// spatialDistance;
+	//spatial_audio_params.speaker_azimuth = spatialAngle;
+	//spatial_audio_params.speaker_elevation = 0;
+	//spatial_audio_params.speaker_orientation = 0;
+	//m_rtcEngine->setRemoteUserSpatialAudioParams(uid, spatial_audio_params);
 }
 
 LRESULT CAgoraSpatialAudioDlg::OnLButtonUpVideo(WPARAM wParam, LPARAM lParam)
@@ -398,7 +398,7 @@ void CAgoraSpatialAudioDlg::OnBnClickedButtonStart()
 
 void CAgoraSpatialAudioDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	if (echoTestId == nIDEvent) {
+	/*if (echoTestId == nIDEvent) {
 		CString strInfo;
 		strInfo.Format(_T("stopAudioMixing "));
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -426,7 +426,7 @@ void CAgoraSpatialAudioDlg::OnTimer(UINT_PTR nIDEvent)
 		m_btnStart.EnableWindow(TRUE);
 	}
 
-	CDialogEx::OnTimer(nIDEvent);
+	CDialogEx::OnTimer(nIDEvent);*/
 }
 
 
