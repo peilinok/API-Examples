@@ -75,38 +75,11 @@
                                     <constraint firstAttribute="width" secondItem="bLu-sF-1q0" secondAttribute="height" multiplier="2:1.82" id="Xue-eM-dIE"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JA2-ox-yse">
-                                <rect key="frame" x="20" y="440.5" width="160" height="40"/>
-                                <subviews>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Face Beautify" translatesAutoresizingMaskIntoConstraints="NO" id="FIm-BA-Fu1">
-                                        <rect key="frame" x="111" y="4.5" width="51" height="31"/>
-                                        <connections>
-                                            <action selector="watermarkSwitchValueChanged:" destination="p70-sh-D1h" eventType="valueChanged" id="JGy-4x-wZi"/>
-                                        </connections>
-                                    </switch>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watermark" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xp5-QE-hs9">
-                                        <rect key="frame" x="0.0" y="10" width="83.5" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="FIm-BA-Fu1" firstAttribute="centerY" secondItem="Xp5-QE-hs9" secondAttribute="centerY" id="CN9-oc-yxq"/>
-                                    <constraint firstAttribute="trailing" secondItem="FIm-BA-Fu1" secondAttribute="trailing" id="Q51-8X-UCi"/>
-                                    <constraint firstAttribute="width" constant="160" id="RD9-aM-tnP"/>
-                                    <constraint firstItem="Xp5-QE-hs9" firstAttribute="centerY" secondItem="JA2-ox-yse" secondAttribute="centerY" id="bce-xg-gH1"/>
-                                    <constraint firstAttribute="height" constant="40" id="mAY-hX-krs"/>
-                                    <constraint firstItem="Xp5-QE-hs9" firstAttribute="leading" secondItem="JA2-ox-yse" secondAttribute="leading" id="tV0-Vb-r5c"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="f4j-hu-9mE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="JA2-ox-yse" firstAttribute="top" secondItem="bLu-sF-1q0" secondAttribute="bottom" constant="20" id="0fy-Pn-CJL"/>
                             <constraint firstItem="f4j-hu-9mE" firstAttribute="trailing" secondItem="bLu-sF-1q0" secondAttribute="trailing" id="FL8-6w-T28"/>
-                            <constraint firstItem="JA2-ox-yse" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" constant="20" id="qJn-9K-JxW"/>
                             <constraint firstItem="bLu-sF-1q0" firstAttribute="top" secondItem="f4j-hu-9mE" secondAttribute="top" id="qnE-dw-lXn"/>
                             <constraint firstItem="bLu-sF-1q0" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" id="wEO-sQ-bsY"/>
                         </constraints>

@@ -250,6 +250,24 @@ class VideoProcessMain : BaseViewController
         }
         agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source)
     }
+    
+    @IBAction func watermarkSwitchValueChanged(_ sender: UISwitch) {
+        if !sender.isOn {
+            agoraKit.clearVideoWatermarks()
+            return
+        }
+
+        guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let filePath = Bundle.main.path(forResource: "agora-logo", ofType: "png"),
+              let fileUrl = URL.init(string: filePath) else {return}
+
+        let width = resolution.width / 10
+        let options = WatermarkOptions()
+        options.visibleInPreview = true
+        options.positionInPortraitMode = CGRect(x: 10, y: 10, width: width, height: width)
+        options.positionInLandscapeMode = CGRect(x: 10, y: 10, width: width, height: width)
+        agoraKit.addVideoWatermark(fileUrl, options: options)
+    }
 }
 
 extension VideoProcessMain: AgoraRtcEngineDelegate {

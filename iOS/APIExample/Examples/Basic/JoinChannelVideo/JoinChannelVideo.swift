@@ -6,6 +6,8 @@
 //  Copyright © 2022 Agora Corp. All rights reserved.
 //
 
+
+/// Join Channel Video
 /// This module show how to join base video comunication.
 /// 1.Init shared AgoraRtcEngineKit: AgoraRtcEngineKit.sharedEngine(...).
 /// 2.Enable video feature: agoraKit.enableVideo().
@@ -50,7 +52,7 @@ class JoinChannelVideoViewController: BaseViewController {
                                                                              mirrorMode: .auto))
         
         
-        // Render local user video with camera preview
+        // Render local user video with camera
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
@@ -81,24 +83,6 @@ class JoinChannelVideoViewController: BaseViewController {
         localVideo.setPlaceholder(text: "Local Host".localized)
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         videoContainer.layoutStream(views: [localVideo, remoteVideo])
-    }
-    
-    @IBAction func watermarkSwitchValueChanged(_ sender: UISwitch) {
-        if !sender.isOn {
-            agoraKit.clearVideoWatermarks()
-            return
-        }
-
-        guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
-              let filePath = Bundle.main.path(forResource: "agora-logo", ofType: "png"),
-              let fileUrl = URL.init(string: filePath) else {return}
-
-        let width = resolution.width / 10
-        let options = WatermarkOptions()
-        options.visibleInPreview = true
-        options.positionInPortraitMode = CGRect(x: 10, y: 10, width: width, height: width)
-        options.positionInLandscapeMode = CGRect(x: 10, y: 10, width: width, height: width)
-        agoraKit.addVideoWatermark(fileUrl, options: options)
     }
 }
 
