@@ -97,6 +97,10 @@ extension JoinChannelVideoViewController: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
+        LogUtils.log(message: "Leave channel after \(stats.duration) seconds", level: .info)
+    }
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "Remote user \(uid) joined elapsed \(elapsed)ms", level: .info)
