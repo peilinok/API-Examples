@@ -2,8 +2,8 @@
 //  JoinChannelVideo.swift
 //  APIExample
 //
-//  Created by Arlin on 2022/5/12.
-//  Copyright © 2022 Agora Corp. All rights reserved.
+//  Created by 张乾泽 on 2020/4/17.
+//  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
 
@@ -52,7 +52,7 @@ class JoinChannelVideoViewController: BaseViewController {
                                                                              mirrorMode: .auto))
         
         
-        // Render local user video with camera
+        // Preview local video with front camera
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
