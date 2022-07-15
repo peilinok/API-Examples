@@ -19,6 +19,29 @@
 import AgoraRtcKit
 import AGEVideoLayout
 
+// MARK: ClickListener
+class ClickListener: UITapGestureRecognizer {
+    var onClick : (() -> Void)? = nil
+}
+
+
+// MARK: UIView Extension
+extension UIView {
+    
+    func setOnClickListener(action :@escaping () -> Void){
+        let tapRecogniser = ClickListener(target: self, action: #selector(onViewClicked(sender:)))
+        tapRecogniser.onClick = action
+        self.addGestureRecognizer(tapRecogniser)
+    }
+    
+    @objc func onViewClicked(sender: ClickListener) {
+        if let onClick = sender.onClick {
+            onClick()
+        }
+    }
+  
+}
+
 class JoinChannelVideoViewController: BaseViewController {
 
     @IBOutlet weak var videoContainer: AGEVideoContainer!
@@ -26,12 +49,81 @@ class JoinChannelVideoViewController: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     
+    var localSurfaceView: UIView?
+    
+    var smallSize: CGSize?
+    var fullSize: CGSize?
+    
+    var isVideoViewClicked: Bool = false
+    
     var agoraKit: AgoraRtcEngineKit!
+    
+//    @objc func didVideoViewClick(sender : UITapGestureRecognizer) {
+//        isVideoViewClicked = !isVideoViewClicked
+//
+//        let screenSize: CGRect = UIScreen.main.bounds
+//
+//        UIView.animate(withDuration: 3.0, animations: { [weak self] in
+////            localVideo.videoView.frame.width *= 0.0
+////            localVideo.videoView.frame.height *= 0.0
+////            CGRect frame = localVideo.videoView.bounds;
+////            frame.origin.x += 20.0
+////            frame.origin.y += 20.0
+////            localVideo.videoView.bounds = frame;
+//
+//            var bounds = self!.localVideo.bounds
+//            bounds.size.width = screenSize.size.width
+//            bounds.size.height = screenSize.size.height
+//            self!.localVideo.bounds = bounds;
+//        })
+//    }
+    
+    func resize() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+            var shouldResize = false
+            
+            let expectedSize = self.isVideoViewClicked ? self.smallSize : self.fullSize
+            
+            if (self.isVideoViewClicked) {
+                let finalHeight = self.localSurfaceView!.frame.size.height - 20
+                let finalWidth = self.localSurfaceView!.frame.size.width - 20
+                
+                if (finalWidth >= expectedSize!.width) {
+                    self.localSurfaceView!.frame.size.width = finalWidth
+                    
+                    shouldResize = true
+                }
+                
+                if (finalHeight >= expectedSize!.height) {
+                    self.localSurfaceView!.frame.size.height = finalHeight
+                    shouldResize = true
+                }
+            } else {
+                let finalHeight = self.localSurfaceView!.frame.size.height + 20
+                let finalWidth = self.localSurfaceView!.frame.size.width + 20
+                
+                if (finalWidth <= expectedSize!.width) {
+                    self.localSurfaceView!.frame.size.width = finalWidth
+                    
+                    shouldResize = true
+                }
+                
+                if (finalHeight <= expectedSize!.height) {
+                    self.localSurfaceView!.frame.size.height = finalHeight
+                    shouldResize = true
+                }
+            }
+            
+            if (shouldResize) {
+                self.resize()
+            }
+        }
+    }
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        
         
         guard let channelId = configs["channelName"] as? String,
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
@@ -51,10 +143,27 @@ class JoinChannelVideoViewController: BaseViewController {
                                                                              orientationMode: orientation,
                                                                              mirrorMode: .auto))
         
+        let screenSize: CGRect = UIScreen.main.bounds
+        
+        localSurfaceView = UIView(frame: screenSize)
+        
+        localSurfaceView!.backgroundColor = UIColor.red
+        
+        smallSize = CGSize(width: localSurfaceView!.frame.size.width - 200, height: localSurfaceView!.frame.size.height - 200)
+        fullSize = screenSize.size
+        
+        view.addSubview(localSurfaceView!)
+        
+        localSurfaceView!.setOnClickListener {
+            self.isVideoViewClicked = !self.isVideoViewClicked
+            
+            self.resize()
+        }
+        
         
         // Preview local video with front camera
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.view = localVideo.videoView
+        videoCanvas.view = localSurfaceView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
             
@@ -72,6 +181,8 @@ class JoinChannelVideoViewController: BaseViewController {
         }
     }
     
+
+    
     override func didMove(toParent parent: UIViewController?) {
         if parent == nil {
             agoraKit.leaveChannel(nil)
@@ -80,9 +191,11 @@ class JoinChannelVideoViewController: BaseViewController {
     
     // MARK: - UI
     func setupUI () {
-        localVideo.setPlaceholder(text: "Local Host".localized)
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        videoContainer.layoutStream(views: [localVideo, remoteVideo])
+//        localVideo.setPlaceholder(text: "Local Host".localized)
+//        remoteVideo.setPlaceholder(text: "Remote Host".localized)
+//        videoContainer.layoutStream(views: [localVideo])
+        
+        view.addSubview(localSurfaceView!)
     }
 }
 
