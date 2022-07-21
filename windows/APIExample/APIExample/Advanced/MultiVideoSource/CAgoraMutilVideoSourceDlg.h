@@ -114,8 +114,6 @@ class CAgoraMutilVideoSourceDlg : public CDialogEx {
 
   void StartDesktopShare();
 
-  bool ShouldPublishStream();
-
  private:
   bool m_joinChannel = false;
   bool m_initialize = false;
@@ -159,8 +157,8 @@ class CAgoraMutilVideoSourceDlg : public CDialogEx {
   afx_msg void OnBnClickedButtonJoinchannel();
   afx_msg void OnBnClickedButtonPublish();
 
-  afx_msg void OnCbnSelchangeComboRole();
-  CComboBox m_combo_role;
   afx_msg void OnBnClickedCheckMic();
   CButton m_chk_mic;
+  afx_msg void OnBnClickedCheckCamera();
+  CButton m_chk_camera;
 };

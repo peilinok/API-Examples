@@ -134,6 +134,8 @@
 #define IDC_CHECK_MIC                   1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
+#define IDC_CHECK_MIC2                  1055
+#define IDC_CHECK_CAMERA                1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
 #define IDC_STATIC_CAMERA               1057
 #define IDC_COMBO_AUDIO_PROFILE         1057
