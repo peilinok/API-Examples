@@ -131,6 +131,7 @@
 #define IDC_CHECK_CURSOR                1054
 #define IDC_CHK_TRANS_CODING            1054
 #define IDC_CHECK_REPORT                1054
+#define IDC_CHECK_MIC                   1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -217,7 +218,6 @@
 #define IDC_CHECK_                      1102
 #define IDC_CHECK_LOWLIGHT              1102
 #define IDC_BUTTON_REMOVE               1103
-#define IDC_COMBO1                      1103
 #define IDC_BUTTON_PRELOAD              1104
 #define IDC_BUTTON_PLAY_EFFECT          1105
 #define IDC_BUTTON_PAUSE_EFFECT         1106

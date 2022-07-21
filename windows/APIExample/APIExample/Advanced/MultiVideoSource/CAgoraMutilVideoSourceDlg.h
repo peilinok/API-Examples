@@ -161,4 +161,6 @@ class CAgoraMutilVideoSourceDlg : public CDialogEx {
 
   afx_msg void OnCbnSelchangeComboRole();
   CComboBox m_combo_role;
+  afx_msg void OnBnClickedCheckMic();
+  CButton m_chk_mic;
 };

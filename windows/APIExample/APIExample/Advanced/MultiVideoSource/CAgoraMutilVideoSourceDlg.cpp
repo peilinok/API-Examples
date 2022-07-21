@@ -29,6 +29,7 @@ void CAgoraMutilVideoSourceDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_BUTTON_PUBLISH, m_btnPublish);
   DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
   DDX_Control(pDX, IDC_COMBO_ROLE, m_combo_role);
+  DDX_Control(pDX, IDC_CHECK_MIC, m_chk_mic);
 }
 
 
@@ -50,6 +51,7 @@ ON_BN_CLICKED(IDC_BUTTON_PUBLISH,
               &CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish)
 ON_CBN_SELCHANGE(IDC_COMBO_ROLE,
                  &CAgoraMutilVideoSourceDlg::OnCbnSelchangeComboRole)
+ON_BN_CLICKED(IDC_CHECK_MIC, &CAgoraMutilVideoSourceDlg::OnBnClickedCheckMic)
 END_MESSAGE_MAP()
 
 
@@ -98,6 +100,7 @@ bool CAgoraMutilVideoSourceDlg::InitAgora() {
   m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
   // enable video in the engine.
   m_rtcEngine->enableVideo();
+  m_rtcEngine->enableAudio();
   m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 
   m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
@@ -221,6 +224,8 @@ BOOL CAgoraMutilVideoSourceDlg::OnInitDialog() {
   m_combo_role.AddString(L"audience");
   m_combo_role.SetCurSel(FAKE_ROLE_BROADCASTER);
 
+  m_chk_mic.SetCheck(1);
+
   // camera screen
   ResumeStatus();
   return TRUE;
@@ -279,7 +284,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
     agora::rtc::ChannelMediaOptions optionsCamera;
     optionsCamera.autoSubscribeAudio = true;
     optionsCamera.autoSubscribeVideo = true;
-    optionsCamera.publishMicrophoneTrack = ShouldPublishStream();
+    optionsCamera.publishMicrophoneTrack = m_chk_mic.GetCheck();
     optionsCamera.publishCameraTrack = ShouldPublishStream();
     optionsCamera.publishScreenTrack = false;
     optionsCamera.clientRoleType = CLIENT_ROLE_BROADCASTER;
@@ -319,7 +324,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish() {
     agora::rtc::ChannelMediaOptions options;
     options.autoSubscribeAudio = false;
     options.autoSubscribeVideo = false;
-    options.publishScreenTrack = ShouldPublishStream();
+    options.publishScreenTrack = true;
     options.publishMicrophoneTrack = false;
     options.publishCameraTrack = false;
     options.clientRoleType = CLIENT_ROLE_BROADCASTER;
@@ -335,6 +340,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish() {
     m_btnPublish.SetWindowText(MultiVideoSourceCtrlUnPublish);
 
   } else {
+    m_rtcEngine->stopScreenCapture();
     m_rtcEngine->leaveChannelEx(m_screen_connection);
     m_btnPublish.SetWindowText(MultiVideoSourceCtrlPublish);
     m_videoWnds[1].Invalidate();
@@ -347,17 +353,21 @@ void CAgoraMutilVideoSourceDlg::OnCbnSelchangeComboRole() {
 
   bool should_pub = ShouldPublishStream();
   agora::rtc::ChannelMediaOptions camera_options;
-  camera_options.publishMicrophoneTrack = should_pub;
-  camera_options.publishCameraTrack = should_pub; 
+  camera_options.publishCameraTrack = should_pub;
 
-  m_rtcEngine->updateChannelMediaOptionsEx(camera_options, m_camera_connection);
+  m_rtcEngine->enableLocalVideo(should_pub);
+  m_rtcEngine->updateChannelMediaOptions(camera_options);
+}
 
-  if (m_bPublishScreen) {
-    agora::rtc::ChannelMediaOptions screen_options;
-    screen_options.publishScreenTrack = should_pub;
-    m_rtcEngine->updateChannelMediaOptionsEx(screen_options,
-                                             m_screen_connection);
-  }
+void CAgoraMutilVideoSourceDlg::OnBnClickedCheckMic() {
+  if (!m_joinChannel) return;
+
+  bool should_unmute = m_chk_mic.GetCheck();
+  agora::rtc::ChannelMediaOptions camera_options;
+  camera_options.publishMicrophoneTrack = should_unmute;
+
+  m_rtcEngine->enableLocalAudio(should_unmute);
+  m_rtcEngine->updateChannelMediaOptions(camera_options);
 }
 
 //EID_JOINCHANNEL_SUCCESS message window handler.
