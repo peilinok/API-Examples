@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
-#include <IAgoraMediaPlayer.h>
-#include <IAgoraMediaPlayerSource.h>
+#include "IAgoraMediaPlayer.h"
+#include "IAgoraMediaPlayerSource.h"
 #define VIDEO_SLIDER_RANGE		10000
 using namespace agora;
 using namespace agora::base;

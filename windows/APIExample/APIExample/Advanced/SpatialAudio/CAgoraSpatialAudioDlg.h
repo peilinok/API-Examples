@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
 #include <map>
-#include <IAgoraSpatialAudio.h>
+#include "IAgoraSpatialAudio.h"
 class CSpatialAudioEventHandler : public IRtcEngineEventHandler
 {
 public:

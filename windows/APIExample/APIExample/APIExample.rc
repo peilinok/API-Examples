@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文(简体，中国) resources
+// Chinese (Simplified, PRC) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -539,9 +539,10 @@ BEGIN
     LISTBOX         IDC_LIST_INFO_BROADCASTING,491,0,139,312,LBS_NOINTEGRALHEIGHT | LBS_DISABLENOSCROLL | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
     LTEXT           "Channel Name",IDC_STATIC_CHANNELNAME,11,328,48,8
     EDITTEXT        IDC_EDIT_CHANNELNAME,71,326,218,13,ES_AUTOHSCROLL
-    PUSHBUTTON      "JoinChannel",IDC_BUTTON_JOINCHANNEL,307,326,60,14
-    PUSHBUTTON      "publish screen",IDC_BUTTON_PUBLISH,373,326,60,14
+    PUSHBUTTON      "JoinChannel",IDC_BUTTON_JOINCHANNEL,378,325,60,14
+    PUSHBUTTON      "publish screen",IDC_BUTTON_PUBLISH,379,353,60,14
     LTEXT           "",IDC_STATIC_DETAIL,442,325,181,58
+    COMBOBOX        IDC_COMBO_ROLE,303,326,48,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_DIALOG_MULTICAMERA DIALOGEX 0, 0, 632, 400
@@ -893,12 +894,12 @@ IDR_TEST_WAVE           WAVE                    "res\\ID_TEST_AUDIO.wav"
 
 IDR_WAVE1               WAVE                    "res\\audiomixing.wav"
 
-#endif    // 中文(简体，中国) resources
+#endif    // Chinese (Simplified, PRC) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英语(美国) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -1024,7 +1025,7 @@ BEGIN
     IDS_ABOUTBOX            "&About APIExample..."
 END
 
-#endif    // 英语(美国) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

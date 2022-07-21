@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "AGVideoWnd.h"
 #include "DirectShow/AGDShowAudioCapture.h"
-#include <IAgoraMediaEngine.h>
+#include "IAgoraMediaEngine.h"
 #include "../../dsound/DSoundRender.h"
 
 

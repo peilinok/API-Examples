@@ -3,7 +3,7 @@
 #include "AGVideoWnd.h"
 #include <map>
 #include <string>
-#include <IAgoraRtcEngineEx.h>
+#include "IAgoraRtcEngineEx.h"
 
 // CMultiCameraDlg 
 typedef struct _CameraInfos {
