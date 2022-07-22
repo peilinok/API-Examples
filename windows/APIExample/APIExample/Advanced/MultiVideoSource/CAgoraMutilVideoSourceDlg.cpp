@@ -104,22 +104,6 @@ bool CAgoraMutilVideoSourceDlg::InitAgora() {
   m_rtcEngine->setClientRole(agora::rtc::CLIENT_ROLE_BROADCASTER);
   m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
-  agora::util::AutoPtr<agora::base::IAgoraParameter> apm;
-  agora::base::IAgoraParameter* p = NULL;
-  if (engine &&
-      !engine->queryInterface(rtc::AGORA_IID_PARAMETER_ENGINE, (void**)&p))
-    apm.reset(p);
-
-  apm->setParameters("{\"che.video.local.camera_index\":1024}");
-  apm->setParameters("{\"rtc.video.degradation_preference\":100}");
-  apm->setParameters("{\"engine.video.enable_hw_encoder\":\"true\"}");
-  apm->setParameters("{\"engine.video.enable_hw_decoder\":\"true\"}");
-  apm->setParameters("{\"che.video.render.d3d9_texture\":true}");
-  apm->setParameters("{\"che.video.win_encoder_preference\":0}");
-  apm->setParameters("{\"che.video.minQP\":20}");
-  apm->setParameters("{\"che.video.vpr.enable\":false}");
-  apm->setParameters("{\"che.video.enableLowBitRateStream\":0}");
-  apm->setParameters("{\"rtc.dual_stream_mode\":false}");
   return true;
 }
 
@@ -243,9 +227,9 @@ void CAgoraMutilVideoSourceDlg::StartDesktopShare()
 	HWND hWnd = ::GetDesktopWindow();
 	RECT destop_rc;
 	::GetWindowRect(hWnd, &destop_rc);
-	scp.dimensions.width = destop_rc.right - destop_rc.left;
-	scp.dimensions.height = destop_rc.bottom - destop_rc.top;
-	m_rtcEngine->startScreenCaptureByScreenRect(rc, rc, scp);
+	scp.dimensions.width = 3840;
+	scp.dimensions.height = 2160;
+	m_rtcEngine->startScreenCaptureByDisplayId(0, rc, scp);
 }
 
 void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
@@ -279,11 +263,28 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
     optionsCamera.clientRoleType = CLIENT_ROLE_BROADCASTER;
 
     auto config = agora::rtc::VideoEncoderConfiguration(
-        agora::rtc::VideoDimensions(960, 720),
+        agora::rtc::VideoDimensions(1280, 720),
         static_cast<agora::rtc::FRAME_RATE>(30), 1500,
         static_cast<agora::rtc::ORIENTATION_MODE>(0));
     config.codecType = agora::rtc::VIDEO_CODEC_H265;
     m_rtcEngine->setVideoEncoderConfiguration(config);
+
+    agora::util::AutoPtr<agora::base::IAgoraParameter> apm;
+    agora::base::IAgoraParameter* p = NULL;
+    if (m_rtcEngine && !m_rtcEngine->queryInterface(
+                           rtc::AGORA_IID_PARAMETER_ENGINE, (void**)&p))
+      apm.reset(p);
+
+    apm->setParameters("{\"che.video.local.camera_index\":1024}");
+    apm->setParameters("{\"rtc.video.degradation_preference\":100}");
+    apm->setParameters("{\"engine.video.enable_hw_encoder\":\"true\"}");
+    apm->setParameters("{\"engine.video.enable_hw_decoder\":\"true\"}");
+    apm->setParameters("{\"che.video.render.d3d9_texture\":true}");
+    apm->setParameters("{\"che.video.win_encoder_preference\":0}");
+    apm->setParameters("{\"che.video.minQP\":20}");
+    apm->setParameters("{\"che.video.vpr.enable\":false}");
+    apm->setParameters("{\"che.video.enableLowBitRateStream\":0}");
+    apm->setParameters("{\"rtc.dual_stream_mode\":false}");
 
     // join channel in the engine.
     if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0,
