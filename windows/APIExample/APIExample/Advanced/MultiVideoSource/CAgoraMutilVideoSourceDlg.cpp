@@ -261,6 +261,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
     optionsCamera.publishCameraTrack = m_chk_camera.GetCheck();
     optionsCamera.publishScreenTrack = false;
     optionsCamera.clientRoleType = CLIENT_ROLE_BROADCASTER;
+    optionsCamera.publishCustomVideoTrack = false;
 
     auto config = agora::rtc::VideoEncoderConfiguration(
         agora::rtc::VideoDimensions(1280, 720),
@@ -318,6 +319,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish() {
     options.publishMicrophoneTrack = false;
     options.publishCameraTrack = false;
     options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+    options.publishCustomVideoTrack = false;
 
     eventHandlerScreen.SetChannelId(0);
     eventHandlerScreen.SetConnectionId(m_screen_connection.localUid);
