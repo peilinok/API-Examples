@@ -291,37 +291,36 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
       m_btnJoinChannel.EnableWindow(FALSE);
     }
     m_strChannel = szChannelId;
+    
+    m_connection_secondary.channelId = szChannelId.c_str();
+
+    agora::rtc::ChannelMediaOptions secondary_options;
+    secondary_options.autoSubscribeAudio = true;
+    secondary_options.autoSubscribeVideo = true;
+    secondary_options.publishScreenTrack = false;
+    secondary_options.publishMicrophoneTrack = m_chk_mic.GetCheck();
+    secondary_options.publishCameraTrack = m_chk_camera.GetCheck();
+    secondary_options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+    secondary_options.publishCustomVideoTrack = false;
+    secondary_options.enableAudioRecordingOrPlayout = true;
+
+    eventHandlerScreen.SetChannelId(0);
+    eventHandlerScreen.SetConnectionId(m_connection_secondary.localUid);
+    eventHandlerScreen.SetMsgReceiver(GetSafeHwnd());
+
+    auto config = agora::rtc::VideoEncoderConfiguration(
+        agora::rtc::VideoDimensions(1280, 720),
+        static_cast<agora::rtc::FRAME_RATE>(30), 1500,
+        static_cast<agora::rtc::ORIENTATION_MODE>(0));
+    m_rtcEngine->setVideoEncoderConfigurationEx(config, m_connection_secondary);
+
+    m_rtcEngine->joinChannelEx(APP_TOKEN, m_connection_secondary,
+                               secondary_options, &eventHandlerScreen);
   } else {
     m_rtcEngine->leaveChannel();
+    m_rtcEngine->leaveChannelEx(m_connection_secondary);
     m_strChannel = "";
   }
-
-  m_connection_secondary.channelId = szChannelId.c_str();
-
-  agora::rtc::ChannelMediaOptions secondary_options;
-  secondary_options.autoSubscribeAudio = true;
-  secondary_options.autoSubscribeVideo = true;
-  secondary_options.publishScreenTrack = false;
-  secondary_options.publishMicrophoneTrack = m_chk_mic.GetCheck();
-  secondary_options.publishCameraTrack = m_chk_camera.GetCheck();
-  secondary_options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-  secondary_options.publishCustomVideoTrack = false;
-  secondary_options.enableAudioRecordingOrPlayout = true;
-
-  eventHandlerScreen.SetChannelId(0);
-  eventHandlerScreen.SetConnectionId(m_connection_secondary.localUid);
-  eventHandlerScreen.SetMsgReceiver(GetSafeHwnd());
-
-  auto config = agora::rtc::VideoEncoderConfiguration(
-      agora::rtc::VideoDimensions(1280, 720),
-      static_cast<agora::rtc::FRAME_RATE>(30), 1500,
-      static_cast<agora::rtc::ORIENTATION_MODE>(0));
-  config.codecType = agora::rtc::VIDEO_CODEC_H265;
-  m_rtcEngine->setVideoEncoderConfigurationEx(config, m_connection_secondary);
-
-  m_rtcEngine->joinChannelEx(APP_TOKEN, m_connection_secondary,
-                             secondary_options,
-                             &eventHandlerScreen);
 }
 
 
@@ -349,6 +348,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish() {
     m_rtcEngine->stopScreenCapture();
     m_btnPublish.SetWindowText(MultiVideoSourceCtrlPublish);
   }
+
   m_bPublishScreen = !m_bPublishScreen;
 }
 
