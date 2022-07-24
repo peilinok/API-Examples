@@ -268,7 +268,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
         static_cast<agora::rtc::FRAME_RATE>(30), 1500,
         static_cast<agora::rtc::ORIENTATION_MODE>(0));
     config.codecType = agora::rtc::VIDEO_CODEC_H265;
-    m_rtcEngine->setVideoEncoderConfiguration(config);
+    m_rtcEngine->setVideoEncoderConfigurationEx(config, m_camera_connection);
 
     agora::util::AutoPtr<agora::base::IAgoraParameter> apm;
     agora::base::IAgoraParameter* p = NULL;
@@ -286,6 +286,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
     apm->setParameters("{\"che.video.vpr.enable\":false}");
     apm->setParameters("{\"che.video.enableLowBitRateStream\":0}");
     apm->setParameters("{\"rtc.dual_stream_mode\":false}");
+    apm->setParameters("{\"che.video.videoCodecIndex\":2}");
 
     // join channel in the engine.
     if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0,
@@ -324,6 +325,13 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish() {
     eventHandlerScreen.SetChannelId(0);
     eventHandlerScreen.SetConnectionId(m_screen_connection.localUid);
     eventHandlerScreen.SetMsgReceiver(GetSafeHwnd());
+
+    auto config = agora::rtc::VideoEncoderConfiguration(
+        agora::rtc::VideoDimensions(3840, 2160),
+        static_cast<agora::rtc::FRAME_RATE>(60), 12000,
+        static_cast<agora::rtc::ORIENTATION_MODE>(0));
+    config.codecType = agora::rtc::VIDEO_CODEC_H265;
+    m_rtcEngine->setVideoEncoderConfigurationEx(config, m_screen_connection);
 
     m_rtcEngine->joinChannelEx(
         APP_TOKEN, m_screen_connection, options,
