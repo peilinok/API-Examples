@@ -302,7 +302,6 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
     m_strChannel = "";
   }
 
-  std::string szChannelId = cs2utf8(strChannelName);
   m_connection_secondary.channelId = szChannelId.c_str();
 
   agora::rtc::ChannelMediaOptions options;
