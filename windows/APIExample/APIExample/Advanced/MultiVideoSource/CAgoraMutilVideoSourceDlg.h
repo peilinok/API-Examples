@@ -129,8 +129,8 @@ class CAgoraMutilVideoSourceDlg : public CDialogEx {
   bool m_bPublishScreen = false;
   CAGVideoWnd m_videoWnds[VIDOE_COUNT];
 
-  agora::rtc::RtcConnection m_camera_connection;
-  agora::rtc::RtcConnection m_screen_connection;
+  agora::rtc::RtcConnection m_connection_main;
+  agora::rtc::RtcConnection m_connection_secondary;
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
