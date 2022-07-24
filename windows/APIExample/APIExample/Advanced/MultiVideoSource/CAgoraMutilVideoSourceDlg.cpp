@@ -271,7 +271,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
         static_cast<agora::rtc::FRAME_RATE>(60), 12000,
         static_cast<agora::rtc::ORIENTATION_MODE>(0));
     config.codecType = agora::rtc::VIDEO_CODEC_H265;
-    m_rtcEngine->setVideoEncoderConfigurationEx(config, m_connection_secondary);
+    m_rtcEngine->setVideoEncoderConfiguration(config);
 
     agora::util::AutoPtr<agora::base::IAgoraParameter> apm;
     agora::base::IAgoraParameter* p = NULL;
@@ -322,7 +322,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
       static_cast<agora::rtc::FRAME_RATE>(30), 1500,
       static_cast<agora::rtc::ORIENTATION_MODE>(0));
   config.codecType = agora::rtc::VIDEO_CODEC_H265;
-  m_rtcEngine->setVideoEncoderConfigurationEx(config, m_connection_main);
+  m_rtcEngine->setVideoEncoderConfigurationEx(config, m_connection_secondary);
 
   m_rtcEngine->joinChannelEx(APP_TOKEN, m_connection_secondary, options,
                              &eventHandlerScreen);
