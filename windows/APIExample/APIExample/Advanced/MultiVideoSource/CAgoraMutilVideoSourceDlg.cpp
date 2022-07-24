@@ -203,8 +203,8 @@ BOOL CAgoraMutilVideoSourceDlg::OnInitDialog() {
   m_videoWnds[0].MoveWindow(&leftArea);
   m_videoWnds[1].MoveWindow(&rightArea);
 
-  m_chk_camera.SetCheck(1);
-  m_chk_mic.SetCheck(1);
+  /*m_chk_camera.SetCheck(1);
+  m_chk_mic.SetCheck(1);*/
 
   // camera screen
   ResumeStatus();
@@ -256,22 +256,15 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
     m_videoWnds[0].SetUID(DEFAULT_CONNECTION_ID);
     m_videoWnds[1].SetUID(DEFAULT_CONNECTION_ID);
 
-    // camera
-    agora::rtc::ChannelMediaOptions options;
-    options.autoSubscribeAudio = true;
-    options.autoSubscribeVideo = true;
-    options.publishMicrophoneTrack = false;
-    options.publishCameraTrack = false;
-    options.publishScreenTrack = false;
-    options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-    options.publishCustomVideoTrack = false;
-
-    auto config = agora::rtc::VideoEncoderConfiguration(
-        agora::rtc::VideoDimensions(3840, 2160),
-        static_cast<agora::rtc::FRAME_RATE>(60), 12000,
-        static_cast<agora::rtc::ORIENTATION_MODE>(0));
-    config.codecType = agora::rtc::VIDEO_CODEC_H265;
-    m_rtcEngine->setVideoEncoderConfiguration(config);
+    agora::rtc::ChannelMediaOptions main_options;
+    main_options.autoSubscribeAudio = false;
+    main_options.autoSubscribeVideo = false;
+    main_options.publishMicrophoneTrack = false;
+    main_options.publishCameraTrack = false;
+    main_options.publishScreenTrack = false;
+    main_options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+    main_options.publishCustomVideoTrack = false;
+    main_options.enableAudioRecordingOrPlayout = false;
 
     agora::util::AutoPtr<agora::base::IAgoraParameter> apm;
     agora::base::IAgoraParameter* p = NULL;
@@ -289,10 +282,11 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
     apm->setParameters("{\"che.video.vpr.enable\":false}");
     apm->setParameters("{\"che.video.enableLowBitRateStream\":0}");
     apm->setParameters("{\"rtc.dual_stream_mode\":false}");
+    apm->setParameters("{\"engine.video.codec_type\":3}");
 
     // join channel in the engine.
-    if (0 ==
-        m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, options)) {
+    if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0,
+                                      main_options)) {
       strInfo.Format(_T("join channel %s"), strChannelName);
       m_btnJoinChannel.EnableWindow(FALSE);
     }
@@ -304,14 +298,15 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
 
   m_connection_secondary.channelId = szChannelId.c_str();
 
-  agora::rtc::ChannelMediaOptions options;
-  options.autoSubscribeAudio = false;
-  options.autoSubscribeVideo = false;
-  options.publishScreenTrack = false;
-  options.publishMicrophoneTrack = m_chk_mic.GetCheck();
-  options.publishCameraTrack = m_chk_camera.GetCheck();
-  options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-  options.publishCustomVideoTrack = false;
+  agora::rtc::ChannelMediaOptions secondary_options;
+  secondary_options.autoSubscribeAudio = true;
+  secondary_options.autoSubscribeVideo = true;
+  secondary_options.publishScreenTrack = false;
+  secondary_options.publishMicrophoneTrack = m_chk_mic.GetCheck();
+  secondary_options.publishCameraTrack = m_chk_camera.GetCheck();
+  secondary_options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+  secondary_options.publishCustomVideoTrack = false;
+  secondary_options.enableAudioRecordingOrPlayout = true;
 
   eventHandlerScreen.SetChannelId(0);
   eventHandlerScreen.SetConnectionId(m_connection_secondary.localUid);
@@ -324,7 +319,8 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
   config.codecType = agora::rtc::VIDEO_CODEC_H265;
   m_rtcEngine->setVideoEncoderConfigurationEx(config, m_connection_secondary);
 
-  m_rtcEngine->joinChannelEx(APP_TOKEN, m_connection_secondary, options,
+  m_rtcEngine->joinChannelEx(APP_TOKEN, m_connection_secondary,
+                             secondary_options,
                              &eventHandlerScreen);
 }
 
@@ -335,6 +331,14 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish() {
     agora::rtc::ChannelMediaOptions options;
     options.publishScreenTrack = true;
     m_rtcEngine->updateChannelMediaOptions(options);
+
+    auto config = agora::rtc::VideoEncoderConfiguration(
+        agora::rtc::VideoDimensions(3840, 2160),
+        static_cast<agora::rtc::FRAME_RATE>(60), 12000,
+        static_cast<agora::rtc::ORIENTATION_MODE>(0));
+    config.codecType = agora::rtc::VIDEO_CODEC_H265;
+    m_rtcEngine->setVideoEncoderConfiguration(config);
+
     m_btnPublish.SetWindowText(MultiVideoSourceCtrlUnPublish);
 
   } else {
@@ -374,7 +378,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedCheckCamera() {
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam,
                                                            LPARAM lParam) {
   unsigned int cId = (unsigned int)lParam;
-  if (cId == m_connection_secondary.localUid) return 0;
+  if (cId == m_connection_main.localUid) return 0;
 
   CString strChannelName = utf82cs(eventHandlerCamera.GetChannelName());
 
@@ -393,7 +397,7 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam,
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel(WPARAM wParam,
                                                      LPARAM lParam) {
   unsigned int cId = (unsigned int)lParam;
-  if (cId == m_connection_secondary.localUid) return 0;
+  if (cId == m_connection_main.localUid) return 0;
 
   m_joinChannel = false;
   CString strChannelName = utf82cs(eventHandlerCamera.GetChannelName());
@@ -409,11 +413,11 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel(WPARAM wParam,
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam,
                                                    LPARAM lParam) {
   unsigned int cId = (unsigned int)lParam;
-  if (cId == m_connection_secondary.localUid) return 0;
+  if (cId == m_connection_main.localUid) return 0;
 
   unsigned int uid = (unsigned int)wParam;
 
-  if (uid == m_connection_secondary.localUid) {  // screen
+  if (uid == m_connection_main.localUid) {  // screen
     m_rtcEngine->muteRemoteAudioStream(uid, true);
     m_rtcEngine->muteRemoteVideoStream(uid, true);
     CString strInfo;
@@ -448,7 +452,7 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam,
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserOffline(WPARAM wParam,
                                                     LPARAM lParam) {
   unsigned int cId = (unsigned int)lParam;
-  if (cId == m_connection_secondary.localUid) return 0;
+  if (cId == m_connection_main.localUid) return 0;
 
   unsigned int target_uid = (unsigned int)wParam;
   auto target_itr = m_remote_video.end();
