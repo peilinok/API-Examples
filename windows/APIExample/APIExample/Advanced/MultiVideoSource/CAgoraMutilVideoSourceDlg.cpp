@@ -72,8 +72,18 @@ bool CAgoraMutilVideoSourceDlg::InitAgora() {
     return false;
   }
 
+  CString strInfo;
+
   m_connection_main.localUid = generateUid();
   m_connection_secondary.localUid = generateUid();
+
+  strInfo.Format(L"main uid: %u", m_connection_main.localUid);
+  m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+  strInfo.Format(L"secondary uid: %u", m_connection_secondary.localUid);
+  m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+
 
   // set message notify receiver window
   eventHandlerCamera.SetMsgReceiver(m_hWnd);
@@ -88,7 +98,6 @@ bool CAgoraMutilVideoSourceDlg::InitAgora() {
   int ret = m_rtcEngine->initialize(context);
   if (ret != 0) {
     m_initialize = false;
-    CString strInfo;
     strInfo.Format(_T("initialize failed: %d"), ret);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
     return false;
@@ -241,8 +250,9 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
   CString strChannelName;
   m_edtChannel.GetWindowText(strChannelName);
 
-  std::string szChannelId = cs2utf8(strChannelName);
-  m_connection_main.channelId = szChannelId.data();
+  m_strChannel = cs2utf8(strChannelName);
+
+  m_connection_main.channelId = m_strChannel.data();
 
   if (!m_joinChannel) {
     if (strChannelName.IsEmpty()) {
@@ -285,14 +295,14 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
     apm->setParameters("{\"engine.video.codec_type\":3}");
 
     // join channel in the engine.
-    if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0,
+    if (0 == m_rtcEngine->joinChannel(APP_TOKEN, m_strChannel.data(),
+                                      m_connection_main.localUid,
                                       main_options)) {
       strInfo.Format(_T("join channel %s"), strChannelName);
       m_btnJoinChannel.EnableWindow(FALSE);
     }
-    m_strChannel = szChannelId;
-    
-    m_connection_secondary.channelId = szChannelId.c_str();
+
+    m_connection_secondary.channelId = m_strChannel.c_str();
 
     agora::rtc::ChannelMediaOptions secondary_options;
     secondary_options.autoSubscribeAudio = true;
@@ -378,7 +388,6 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedCheckCamera() {
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam,
                                                            LPARAM lParam) {
   unsigned int cId = (unsigned int)lParam;
-  if (cId == m_connection_main.localUid) return 0;
 
   CString strChannelName = utf82cs(eventHandlerCamera.GetChannelName());
 
@@ -386,7 +395,7 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam,
   m_btnJoinChannel.EnableWindow(TRUE);
   m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
   CString strInfo;
-  strInfo.Format(_T("join %s success,cid=%u, uid=%u"), strChannelName, cId,
+  strInfo.Format(_T("join %s success uid=%u"), strChannelName, cId,
                  wParam);
   m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
@@ -413,14 +422,21 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel(WPARAM wParam,
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam,
                                                    LPARAM lParam) {
   unsigned int cId = (unsigned int)lParam;
+  unsigned int uid = (unsigned int)wParam;
+
   if (cId == m_connection_main.localUid) return 0;
 
-  unsigned int uid = (unsigned int)wParam;
+  CString strInfo;
+  if (uid != m_connection_main.localUid &&
+      uid != m_connection_secondary.localUid) {
+    strInfo.Format(L"on user %u joined", uid);
+    m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+  }
 
   if (uid == m_connection_main.localUid) {  // screen
     m_rtcEngine->muteRemoteAudioStream(uid, true);
     m_rtcEngine->muteRemoteVideoStream(uid, true);
-    CString strInfo;
+    
     strInfo.Format(_T("local screen %u joined "), uid);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
@@ -436,10 +452,13 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam,
       canvas.renderMode = media::base::RENDER_MODE_FIT;
       canvas.sourceType = VIDEO_SOURCE_REMOTE;
       canvas.view = wnd.GetSafeHwnd();
-      m_rtcEngine->setupRemoteVideo(canvas);
+      m_rtcEngine->setupRemoteVideoEx(canvas, m_connection_secondary);
 
-			wnd.SetUID(uid);
-			m_remote_video[wnd.GetSafeHwnd()] = uid;
+      wnd.SetUID(uid);
+      m_remote_video[wnd.GetSafeHwnd()] = uid;
+
+      strInfo.Format(_T("set renderer for %u"), uid);
+      m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
       break;
     }
   }
@@ -452,9 +471,13 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam,
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserOffline(WPARAM wParam,
                                                     LPARAM lParam) {
   unsigned int cId = (unsigned int)lParam;
+  unsigned int target_uid = (unsigned int)wParam;
   if (cId == m_connection_main.localUid) return 0;
 
-  unsigned int target_uid = (unsigned int)wParam;
+  CString strInfo;
+  strInfo.Format(_T("on user %u offline "), target_uid);
+  m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
   auto target_itr = m_remote_video.end();
   for (auto itr = m_remote_video.begin(); itr != m_remote_video.end(); itr++) {
     if (itr->second == target_uid) {
@@ -463,12 +486,16 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserOffline(WPARAM wParam,
     }
   }
 
-  if (target_itr == m_remote_video.end()) return 0;
+  if (target_itr == m_remote_video.end() || !m_rtcEngine) return 0;
+
   VideoCanvas canvas;
   canvas.uid = target_uid;
-  m_rtcEngine->setupRemoteVideo(canvas);
+  m_rtcEngine->setupRemoteVideoEx(canvas, m_connection_secondary);
 
-	m_remote_video.erase(target_itr);
+  m_remote_video.erase(target_itr);
+
+  strInfo.Format(_T("reset render for %u"), target_uid);
+  m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
   return 0;
 }
