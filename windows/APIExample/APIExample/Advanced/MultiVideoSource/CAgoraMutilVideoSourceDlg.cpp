@@ -212,8 +212,8 @@ BOOL CAgoraMutilVideoSourceDlg::OnInitDialog() {
   m_videoWnds[0].MoveWindow(&leftArea);
   m_videoWnds[1].MoveWindow(&rightArea);
 
-  /*m_chk_camera.SetCheck(1);
-  m_chk_mic.SetCheck(1);*/
+  m_chk_camera.SetCheck(1);
+  m_chk_mic.SetCheck(1);
 
   // camera screen
   ResumeStatus();
@@ -322,6 +322,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel() {
         agora::rtc::VideoDimensions(1280, 720),
         static_cast<agora::rtc::FRAME_RATE>(30), 1500,
         static_cast<agora::rtc::ORIENTATION_MODE>(0));
+    config.codecType = agora::rtc::VIDEO_CODEC_H265;
     m_rtcEngine->setVideoEncoderConfigurationEx(config, m_connection_secondary);
 
     m_rtcEngine->joinChannelEx(APP_TOKEN, m_connection_secondary,
