@@ -97,47 +97,47 @@ END_MESSAGE_MAP()
 
 // CAPIExampleDlg message handlers
 
-BOOL CAPIExampleDlg::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
+BOOL CAPIExampleDlg::OnInitDialog() {
+  CDialogEx::OnInitDialog();
 
-	// Add "About..." menu item to system menu.
+  // Add "About..." menu item to system menu.
 
-	// IDM_ABOUTBOX must be in the system command range.
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
+  // IDM_ABOUTBOX must be in the system command range.
+  ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+  ASSERT(IDM_ABOUTBOX < 0xF000);
 
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != nullptr)
-	{
-		BOOL bNameValid;
-		CString strAboutMenu;
-		bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
-		ASSERT(bNameValid);
-		if (!strAboutMenu.IsEmpty())
-		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
-			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
-		}
-	}
+  CMenu *pSysMenu = GetSystemMenu(FALSE);
+  if (pSysMenu != nullptr) {
+    BOOL bNameValid;
+    CString strAboutMenu;
+    bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
+    ASSERT(bNameValid);
+    if (!strAboutMenu.IsEmpty()) {
+      pSysMenu->AppendMenu(MF_SEPARATOR);
+      pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+    }
+  }
 
-	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+  // Set the icon for this dialog.  The framework does this automatically
+  //  when the application's main window is not a dialog
+  SetIcon(m_hIcon, TRUE);   // Set big icon
+  SetIcon(m_hIcon, FALSE);  // Set small icon
 
-	// TODO: Add extra initialization here
-	std::string strAppID = GET_APP_ID;
-	if (strcmp(strAppID.c_str(), "") == 0)
-	{
-		AfxMessageBox(_T("APP ID is not set, you can see readme file on how to get an APP ID."));
-		ExitProcess(1);
-	}
-    InitCtrlText();
-    InitSceneDialog();
-    InitSceneList();
-    
-	return TRUE;  // return TRUE  unless you set the focus to a control
+  // TODO: Add extra initialization here
+  std::string strAppID = GET_APP_ID;
+  if (strcmp(strAppID.c_str(), "") == 0) {
+    AfxMessageBox(
+        _T("APP ID is not set, you can see readme file on how to get an APP ")
+        _T("ID."));
+    ExitProcess(1);
+  }
+  InitCtrlText();
+  InitSceneDialog();
+  InitSceneList();
+
+  CreateScene(m_lstAdvanced, advancedMultiVideoSource);
+
+  return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
 void CAPIExampleDlg::OnSysCommand(UINT nID, LPARAM lParam)

@@ -91,6 +91,9 @@ private:
 
 	CAGInfoWnd		m_wndInfo;
 
+	CWnd *m_pParent;
+  RECT m_OldRect;
+
 private:
 	UINT		m_nUID = 0;
 

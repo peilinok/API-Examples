@@ -238,7 +238,7 @@ void CAGVideoWnd::OnLButtonUp(UINT nFlags, CPoint point)
 void CAGVideoWnd::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  add message handle code and /or call default values here
-	::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWMODECHANGED, (WPARAM)this, (LPARAM)m_nUID);
+	// ::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWMODECHANGED, (WPARAM)this, (LPARAM)m_nUID);
 
 	CWnd::OnRButtonDown(nFlags, point);
 }
@@ -248,6 +248,8 @@ int CAGVideoWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
+
+	m_pParent = this->GetParent();
 
 	// TODO:  add you own creation code here
 	m_wndInfo.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, WND_INFO_WIDTH, WND_INFO_HEIGHT), this, IDC_STATIC);
@@ -298,10 +300,26 @@ void CAGVideoWnd::OnSize(UINT nType, int cx, int cy)
 	}
 }
 
-void CAGVideoWnd::OnLButtonDblClk(UINT nFlags, CPoint point)
-{
-	// TODO:  add message handle code and /or call default values here
-	::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWMODECHANGED, (WPARAM)this, (LPARAM)m_nUID);
+void CAGVideoWnd::OnLButtonDblClk(UINT nFlags, CPoint point) {
+  // TODO:  add message handle code and /or call default values here
+  // ::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWMODECHANGED, (WPARAM)this,
+  // (LPARAM)m_nUID);
 
-	CWnd::OnLButtonDblClk(nFlags, point);
+  if (this->GetParent() == m_pParent) {
+
+		this->GetWindowRect(&m_OldRect);
+    this->GetParent()->ScreenToClient(&m_OldRect);
+    this->SetParent(NULL);
+
+    RECT rc_desktop;
+    ::GetWindowRect(::GetDesktopWindow(), &rc_desktop);
+
+		this->MoveWindow(&rc_desktop);
+    this->BringWindowToTop();
+  } else {
+    this->SetParent(m_pParent);
+    this->MoveWindow(&m_OldRect);
+  }
+
+  CWnd::OnLButtonDblClk(nFlags, point);
 }
