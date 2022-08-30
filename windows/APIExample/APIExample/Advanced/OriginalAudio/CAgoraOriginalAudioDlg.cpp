@@ -145,6 +145,18 @@ agora::media::IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserv
 	return params;
 }
 
+bool COriginalAudioProcFrameObserver::onEarMonitoringAudioFrame(
+    AudioFrame& audioFrame) {
+  return true;
+}
+
+agora::media::IAudioFrameObserverBase::AudioParams
+COriginalAudioProcFrameObserver::getEarMonitoringAudioParams() {
+  agora::media::IAudioFrameObserverBase::AudioParams params(
+      16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+  return params;
+}
+
 
 //Initialize the Ctrl Text.
 void CAgoraOriginalAudioDlg::InitCtrlText()
